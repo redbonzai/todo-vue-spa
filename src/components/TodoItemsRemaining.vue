@@ -5,11 +5,16 @@
 <script>
   export default {
     name: 'todo-items-remaining',
-    props: {
+    computed: {
+      remaining() {
+        return this.$store.getters.remaining
+      }
+    }
+    /*props: {
       remaining: {
         type: Number,
         required: true
       }
-    }
+    }*/
   }
 </script>

@@ -10,10 +10,9 @@
 
     <transition-group name="fade" enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
         <todo-item
-          v-for="(todo, index) in todosFiltered"
+          v-for="todo in todosFiltered"
           :key="todo.id"
           :todo="todo"
-          :index="index"
           :checkAll="!anyRemainingTodos">
         </todo-item>
 
@@ -21,15 +20,11 @@
 
     <!-- Check all todos -->
     <div class="extra-container">
-      <todo-check-all
-        :anyRemainingTodos="anyRemainingTodos">
-      </todo-check-all>
+      <todo-check-all></todo-check-all>
 
     <!-- show remaining todos count -->
-      <todo-items-remaining
-        :remaining="remaining">
-
-      </todo-items-remaining>
+      <!-- :remaining="remaining" -->
+      <todo-items-remaining></todo-items-remaining>
     </div>
 
     <!-- This is the filters section -->
@@ -37,10 +32,7 @@
       <todo-filtered></todo-filtered>
 
       <transition name="fade">
-        <todo-clear-completed
-          :showClearCompletedButton="showClearCompletedButton">
-
-        </todo-clear-completed>
+        <todo-clear-completed></todo-clear-completed>
       </transition>
 
     </div>
@@ -53,6 +45,7 @@
   import TodoCheckAll from "./TodoCheckAll"
   import TodoFiltered from "./TodoFiltered";
   import TodoClearCompleted from "./TodoClearCompleted";
+  import moment from 'moment'
 
   export default {
     name: 'todo-list',
@@ -65,75 +58,25 @@
     },
     data() {
       return {
-        todoName: '',
+        // todoName: '',
         newTodo: '',
         idForTodo: 3,
-        todoDescription: 'lkpijpijpoijpoj',
-        completed: false,
-        targetDate: '',
-        beforeEditCache: '',
-        filter: 'all',
-        todos: [{
-          'id': 2,
-          'name': 'Da Munchkin',
-          'description': 'I love my munchkin',
-          'completed': 0,
-          'editing': false,
-          'target_date': '2020-04-23'
-
-        },
-          {
-            'id': 1,
-            'name': 'the dang sample app',
-            'description': 'vue spa laravel api',
-            'completed': 0,
-            'editing': false,
-            'target_date': '2020-04-23'
-
-          }]
+        todoDescription: '',
       }
     },
 
     created() {
-      eventBus.$on('removedTodo', (index) => this.removeTodo(index))
-      eventBus.$on('finishedEdit', (data) => this.finishedEdit(data))
-      eventBus.$on('checkAllChanged', (checked) => this.checkAllTodos(checked))
-      eventBus.$on('filterChanged', (filter) => this.filter = filter)
-      eventBus.$on('clearCompletedTodos', () => this.clearCompleted())
+      this.$store.dispatch('retrieveTodos')
     },
 
-    beforeDestroy() {
-      eventBus.$off('removedTodo', (index) => this.removeTodo(index))
-      eventBus.$off('finishedEdit', (data) => this.finishedEdit(data))
-      eventBus.$off('checkAllChanged', (checked) => this.checkAllTodos(checked))
-      eventBus.$off('filterChanged', (filter) => this.filter = filter)
-      eventBus.$off('clearCompletedTodos', () => this.clearCompleted())
-    },
     computed: {
-      remaining() {
-        return this.todos.filter(todo => !todo.completed).length
-      },
-
       anyRemainingTodos() {
-        return this.remaining !== 0
+        return this.$store.getters.anyRemainingTodos
       },
 
       todosFiltered() {
-        if (this.filter === 'all') {
-          return this.todos
-
-        } else if (this.filter === 'active') {
-          return this.todos.filter(todo => !todo.completed)
-
-        } else if (this.filter === 'completed') {
-          return this.todos.filter(todo => todo.completed)
-
-        }
+        return this.$store.getters.todosFiltered
       },
-
-      showClearCompletedButton() {
-        return this.todos.filter(todo => todo.completed).length > 0
-      }
     },
 
     methods: {
@@ -141,34 +84,21 @@
         if (this.newTodo.trim().length === 0) {
           return;
         }
-        this.todos.push({
+
+        let futureDate = moment().add(1, 'week').format('YYYY-MM-DD')
+
+        this.$store.dispatch('addTodo', {
           id: this.idForTodo,
           name: this.newTodo,
-          description: this.todoDescription,
-          completed: 0,
-          target_date: '2020-04-23'
+          description: this.newTodo,
+          completed: Math.round(Math.random()), // 0 or 1
+          target_date: futureDate
 
         })
 
         this.newTodo = ''
         this.idForTodo++
       },
-
-      removeTodo(index) {
-        this.todos.splice(index, 1)
-      },
-
-      checkAllTodos() {
-        this.todos.forEach(todo => todo.completed = event.target.checked)
-      },
-
-      clearCompleted() {
-        this.todos = this.todos.filter(todo => !todo.completed)
-      },
-
-      finishedEdit(data) {
-        this.todos.splice(data.index, 1, data.todo)
-      }
     }
   }
 </script>
