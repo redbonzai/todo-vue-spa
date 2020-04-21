@@ -23,21 +23,18 @@
         @keyup.esc="cancelEdit"
         v-focus>
     </div>
-    <div class="remove-item" @click="removeTodo(index)">&times;</div>
+    <div class="remove-item" @click="removeTodo(todo.id)">&times;</div>
   </div>
 </template>
 
 <script>
+  import moment from 'moment'
   export default {
     name: 'todo-item',
     props: {
       todo: {
         type: Object,
         required: true,
-      },
-      index: {
-        type: Number,
-        required: true
       },
       checkAll: {
         type: Boolean,
@@ -71,8 +68,8 @@
       }
     },
     methods: {
-      removeTodo(index) {
-        eventBus.$emit('removedTodo', index)
+      removeTodo(id) {
+        this.$store.dispatch('deleteTodo', id)
       },
 
       editTodo() {
@@ -86,15 +83,17 @@
         }
 
         this.editing = false
-        eventBus.$emit('finishedEdit', {
-          'index': this.index,
-          'todo': {
-            'id': this.id,
-            'name': this.name,
-            'completed': this.completed,
-            'editing': this.editing,
-          }
+
+        let futureDate = moment().add(1, 'week').format('YYYY-MM-DD')
+        this.$store.dispatch('updateTodo', {
+          'id': this.id,
+          'name': this.name,
+          'description': 'Will be finalized on: ' + futureDate,
+          'completed': this.completed,
+          'targetDate': futureDate,
+          'editing': this.editing,
         })
+
       },
 
       cancelEdit() {
