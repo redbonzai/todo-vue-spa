@@ -1,7 +1,15 @@
 # todo-spa
 
 > a project for evaluation by OnlineMedEd.  This is a Vue JS single page application that consumes Laravel API data
+> This project consumes data from the [TODO Laravel API](https://github.com/redbonzai/todo-laravel7-api.git)
+> It should be cloned and installed according to the documentation on that repository
 
+## Get project
+```bash
+git clone https://github.com/redbonzai/todo-vue-spa.git
+cd ~/Projects/todo-vue-spa
+(from wherever the project resides on your system)
+```
 ## Build Setup
 
 ``` bash
@@ -18,4 +26,3 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
