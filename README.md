@@ -10,7 +10,8 @@
 - The user can mark a todo item as complete
 - The user can filter through their todo items ( all, complete, or active )
 - The user can remove all the completed todos with a simple click 
-- The user can mark all the todos as completed with a simple click.  
+- The user can mark all the todos as completed with a simple click. 
+- State managed by Vuex
 
 ## Get project
 ```bash
