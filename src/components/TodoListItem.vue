@@ -7,7 +7,7 @@
         @change="doneEditing">
       <div
         v-if="!editing"
-        @dblclick="editTodo"
+        @click="editTodo"
         class="todo-item-label"
         :class="{completed: completed}">
         {{name}}
