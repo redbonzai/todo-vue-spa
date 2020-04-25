@@ -1,5 +1,4 @@
-# todo-spa
-
+# todo-vue-spa
 > a project for evaluation by OnlineMedEd.  This is a Vue JS single page application that consumes Laravel API data
 > This project consumes data from the [TODO Laravel API](https://github.com/redbonzai/todo-laravel7-api.git)
 > It should be cloned and installed according to the documentation on that repository

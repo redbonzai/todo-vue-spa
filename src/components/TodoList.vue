@@ -23,7 +23,6 @@
       <todo-check-all></todo-check-all>
 
     <!-- show remaining todos count -->
-      <!-- :remaining="remaining" -->
       <todo-items-remaining></todo-items-remaining>
     </div>
 
